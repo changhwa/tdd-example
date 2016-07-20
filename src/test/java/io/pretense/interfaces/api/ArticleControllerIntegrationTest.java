@@ -1,5 +1,7 @@
 package io.pretense.interfaces.api;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.pretense.domain.Article;
 import io.pretense.infrastructure.jpa.ArticleRepository;
 import org.junit.Before;
@@ -17,6 +19,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import io.pretense.DemoApplicationTests;
 import org.springframework.web.util.NestedServletException;
+
+import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -38,6 +43,9 @@ public class ArticleControllerIntegrationTest {
 
     @Autowired
     private ArticleRepository articleRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Before
     public void setup() {
@@ -84,9 +92,23 @@ public class ArticleControllerIntegrationTest {
     @Test
     public void 게시글_전체_조회() throws Exception {
 
-        //when * then
-        mvc.perform(get("/api/article").contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andExpect(status().isOk());
+        //given
+        createArticle("조회제목", "조회본문");
+        createArticle("조회제목", "조회본문");
+        createArticle("조회제목", "조회본문");
+        createArticle("조회제목", "조회본문");
+        createArticle("조회제목", "조회본문");
+        createArticle("조회제목", "조회본문");
+        createArticle("조회제목", "조회본문");
+        createArticle("조회제목", "조회본문");
+
+        //when
+        String body = mvc.perform(get("/api/article?size=2").contentType(MediaType.APPLICATION_JSON_UTF8))
+            .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+        //then
+        List list = getContentListByResponseBody(body);
+        assertThat(list.size(), is(2));
     }
 
     @Test
@@ -106,6 +128,11 @@ public class ArticleControllerIntegrationTest {
 
     private Article createArticle(String title, String body) {
         return articleRepository.save(new Article(title, body));
+    }
+
+    private List getContentListByResponseBody(String body) throws java.io.IOException {
+        Map<String, Object> m = objectMapper.readValue(body, new TypeReference<Map<String, Object>>(){});
+        return (List) m.get("content");
     }
 
 }

@@ -1,6 +1,7 @@
 package io.pretense.interfaces.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -32,8 +33,8 @@ public class ArticleController {
     }
 
     @RequestMapping(value = {"","/"}, method = RequestMethod.GET)
-    private ResponseEntity list() {
-        return new ResponseEntity<>(articleRepository.findAll(), HttpStatus.OK);
+    private ResponseEntity list(Pageable pageable) {
+        return new ResponseEntity<>(articleRepository.findAll(pageable), HttpStatus.OK);
     }
 
     @RequestMapping(value = {"/{id}"}, method = RequestMethod.GET)
