@@ -131,7 +131,7 @@
 							<instrumentation>
 								<excludes>
 									<exclude>**/*Config.class</exclude>
-									<exclude>**/domain/*.class</exclude>
+									<exclude>**/DemoApplication.class</exclude>
 								</excludes>
 							</instrumentation>
 							<check/>
