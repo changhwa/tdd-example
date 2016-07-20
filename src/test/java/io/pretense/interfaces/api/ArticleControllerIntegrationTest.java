@@ -2,22 +2,16 @@ package io.pretense.interfaces.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.pretense.config.ControllerIntegrationTestHelper;
 import io.pretense.domain.Article;
 import io.pretense.infrastructure.jpa.ArticleRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
-import io.pretense.DemoApplicationTests;
 import org.springframework.web.util.NestedServletException;
 
 import java.util.List;
@@ -25,17 +19,10 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(DemoApplicationTests.class)
-@WebAppConfiguration
-@ActiveProfiles(profiles = "test")
-public class ArticleControllerIntegrationTest {
+public class ArticleControllerIntegrationTest extends ControllerIntegrationTestHelper {
 
     @Autowired
     private WebApplicationContext context;
@@ -60,7 +47,7 @@ public class ArticleControllerIntegrationTest {
 
         //when
         mvc.perform(post("/api/article").contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
-            .andExpect(status().isCreated());
+                .andExpect(status().isCreated());
     }
 
     @Test(expected = NestedServletException.class)
@@ -78,7 +65,7 @@ public class ArticleControllerIntegrationTest {
 
         //given
         Article article = createArticle("제목", "본문");
-        String json = "{\"id\":"+article.getId()+",\"title\":\"수정제목\",\"body\":\"수정본문\"}";
+        String json = "{\"id\":" + article.getId() + ",\"title\":\"수정제목\",\"body\":\"수정본문\"}";
 
         //when
         String body = mvc.perform(put("/api/article").contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
@@ -86,7 +73,7 @@ public class ArticleControllerIntegrationTest {
                 .andReturn().getResponse().getContentAsString();
 
         //then
-        assertThat(body, is("{\"id\":"+article.getId()+",\"title\":\"수정제목\",\"body\":\"수정본문\"}"));
+        assertThat(body, is("{\"id\":" + article.getId() + ",\"title\":\"수정제목\",\"body\":\"수정본문\"}"));
     }
 
     @Test
@@ -104,7 +91,7 @@ public class ArticleControllerIntegrationTest {
 
         //when
         String body = mvc.perform(get("/api/article?size=2").contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         //then
         List list = getContentListByResponseBody(body);
@@ -119,11 +106,11 @@ public class ArticleControllerIntegrationTest {
         Long id = article.getId();
 
         //when
-        String body = mvc.perform(get("/api/article/"+id).contentType(MediaType.APPLICATION_JSON_UTF8))
-            .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        String body = mvc.perform(get("/api/article/" + id).contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         //then
-        assertThat(body, is("{\"id\":"+article.getId()+",\"title\":\"조회제목\",\"body\":\"조회본문\"}"));
+        assertThat(body, is("{\"id\":" + article.getId() + ",\"title\":\"조회제목\",\"body\":\"조회본문\"}"));
     }
 
     private Article createArticle(String title, String body) {
@@ -131,7 +118,8 @@ public class ArticleControllerIntegrationTest {
     }
 
     private List getContentListByResponseBody(String body) throws java.io.IOException {
-        Map<String, Object> m = objectMapper.readValue(body, new TypeReference<Map<String, Object>>(){});
+        Map<String, Object> m = objectMapper.readValue(body, new TypeReference<Map<String, Object>>() {
+        });
         return (List) m.get("content");
     }
 
