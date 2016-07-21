@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator';
 import request from 'superagent';
 import { Grid, Col, Button, Row, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import Pager from 'react-pager';
+import moment from 'moment';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import 'react-bootstrap-table/css/react-bootstrap-table-all.min.css';
 
@@ -29,6 +30,7 @@ export default class Board extends Component {
       .end((err, res) => {
         if (!err) {
           const resBody = res.body;
+          console.log(res.body);
           this.setState({
             articles: resBody.content,
             totalPage: resBody.totalPages,
@@ -83,6 +85,10 @@ export default class Board extends Component {
     });
   }
 
+  convertDateFormat(cell) {
+    return moment(cell).format('YYYY-MM-DD HH:mm:ss');
+  }
+
   render() {
     return (
       <div>
@@ -124,6 +130,7 @@ export default class Board extends Component {
                   <BootstrapTable data={this.state.articles}>
                     <TableHeaderColumn dataField="id" isKey={true} hidden>ID</TableHeaderColumn>
                     <TableHeaderColumn dataField="title">제목</TableHeaderColumn>
+                    <TableHeaderColumn dataField="updatedAt" dataFormat={this.convertDateFormat}>수정일</TableHeaderColumn>
                   </BootstrapTable>
                 </div>
                 <div>
