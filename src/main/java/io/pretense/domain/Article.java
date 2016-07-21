@@ -6,11 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -28,7 +26,15 @@ public class Article {
     @NotNull
     private String body;
 
+    private Date updatedAt;
+
     public Article(String title, String body) {
+        this.title = title;
+        this.body = body;
+    }
+
+    public Article(Long id, String title, String body) {
+        this.id = id;
         this.title = title;
         this.body = body;
     }
@@ -37,5 +43,15 @@ public class Article {
         this.id = articleDto.getId();
         this.title = articleDto.getTitle();
         this.body = articleDto.getBody();
+    }
+
+    @PrePersist
+    public void prePersistUpdateAt() {
+        this.updatedAt = new Date();
+    }
+
+    @PreUpdate
+    public void preUpdateUpdateAt() {
+        this.updatedAt = new Date();
     }
 }

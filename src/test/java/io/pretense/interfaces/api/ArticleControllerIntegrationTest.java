@@ -17,6 +17,7 @@ import org.springframework.web.util.NestedServletException;
 import java.util.List;
 import java.util.Map;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -73,7 +74,7 @@ public class ArticleControllerIntegrationTest extends ControllerIntegrationTestH
                 .andReturn().getResponse().getContentAsString();
 
         //then
-        assertThat(body, is("{\"id\":" + article.getId() + ",\"title\":\"수정제목\",\"body\":\"수정본문\"}"));
+        assertThat(body, containsString("{\"id\":" + article.getId() + ",\"title\":\"수정제목\",\"body\":\"수정본문\",\"updatedAt\":"));
     }
 
     @Test
@@ -110,9 +111,8 @@ public class ArticleControllerIntegrationTest extends ControllerIntegrationTestH
                 .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         //then
-        assertThat(body, is("{\"id\":" + article.getId() + ",\"title\":\"조회제목\",\"body\":\"조회본문\"}"));
+        assertThat(body, containsString("{\"id\":" + article.getId() + ",\"title\":\"조회제목\",\"body\":\"조회본문\",\"updatedAt\":"));
     }
-
     private Article createArticle(String title, String body) {
         return articleRepository.save(new Article(title, body));
     }
