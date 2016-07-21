@@ -132,6 +132,7 @@
 								<excludes>
 									<exclude>**/*Config.class</exclude>
 									<exclude>**/DemoApplication.class</exclude>
+									<exclude>**/*Dto.class</exclude>
 								</excludes>
 							</instrumentation>
 							<check/>
