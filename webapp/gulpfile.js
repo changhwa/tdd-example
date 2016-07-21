@@ -35,7 +35,7 @@ gulp.task('webpack:build', ['clean'], function (callback) {
 
 gulp.task('build', ['set-env', 'webpack:build']);
 
-gulp.task("webpack-dev-server", ['set-env', 'lint'], function (callback) {
+gulp.task("webpack-dev-server", ['set-env','lint'], function (callback) {
 
   var webpackConfig ;
 

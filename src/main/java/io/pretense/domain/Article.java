@@ -1,14 +1,18 @@
 package io.pretense.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.pretense.interfaces.api.support.ArticleDto;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +31,10 @@ public class Article {
 
     private Date updatedAt;
 
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("id desc")
+    private List<Comment> comments;
+
     public Article(String title, String body) {
         this.title = title;
         this.body = body;
@@ -42,6 +50,13 @@ public class Article {
         this.id = articleDto.getId();
         this.title = articleDto.getTitle();
         this.body = articleDto.getBody();
+    }
+
+    public void addComment(Comment comment) {
+        if( comments == null) comments = new ArrayList<>();
+        if(!comments.contains(comment)) {
+            comments.add(comment);
+        }
     }
 
     @PrePersist

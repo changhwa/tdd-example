@@ -2,6 +2,7 @@ package io.pretense.infrastructure.jpa;
 
 import io.pretense.config.RepositoryIntegrationTestHelper;
 import io.pretense.domain.Article;
+import io.pretense.domain.Comment;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +90,21 @@ public class ArticleRepositoryIntegrationTest extends RepositoryIntegrationTestH
         List<Article> articles = page.getContent();
         assertTrue(articles.get(0).getId() > articles.get(articles.size()-1).getId());
     }
+
+    @Test
+    public void 게시글과_댓글을_가져온다() {
+
+        //given
+        Long testId = 9L;
+
+        //when
+        Article article = articleRepository.findOne(testId);
+        List<Comment> comments = article.getComments();
+
+        //then
+        assertThat(comments.size(), is(2));
+    }
+
 
     private Article givenSaveArticle() {
         //given

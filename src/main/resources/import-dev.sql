@@ -9,3 +9,6 @@ insert into article (id, title, body, updated_at) VALUES (8, '테스트-제목8'
 insert into article (id, title, body, updated_at) VALUES (9, '테스트-제목9', '테스트-본문9', now());
 
 --
+insert into comment (id, body, article_id, updated_at) VALUES (1, '테스트9-댓글1', 9, now());
+insert into comment (id, body, article_id, updated_at) VALUES (2, '테스트9-댓글2', 9, now());
+insert into comment (id, body, article_id, updated_at) VALUES (3, '테스트8-댓글1', 8, now());

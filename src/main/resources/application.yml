@@ -19,7 +19,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        show_sql: false
-        format_sql: false
+        show_sql: true
+        format_sql: true
 logging:
   config: classpath:logback.xml

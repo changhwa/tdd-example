@@ -7,6 +7,7 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password:
+    data: classpath:/import-dev.sql
   h2:
     console:
       enabled: true
@@ -18,5 +19,5 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        show_sql: false
-        format_sql: false
+        show_sql: true
+        format_sql: true
