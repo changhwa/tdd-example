@@ -34,7 +34,7 @@ public class ArticleController {
 
     @RequestMapping(value = {"","/"}, method = RequestMethod.GET)
     private ResponseEntity list(Pageable pageable) {
-        return new ResponseEntity<>(articleRepository.findAll(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(articleRepository.findAllByOrderByIdDesc(pageable), HttpStatus.OK);
     }
 
     @RequestMapping(value = {"/{id}"}, method = RequestMethod.GET)

@@ -5,6 +5,10 @@ import io.pretense.domain.Article;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -69,6 +73,21 @@ public class ArticleRepositoryIntegrationTest extends RepositoryIntegrationTestH
 
         //then
         assertNull(articleRepository.findOne(article.getId()));
+    }
+
+    @Test
+    public void test_find_by_all_order_by_id_desc() {
+
+        //given
+        givenSaveArticle();
+        givenSaveArticle();
+
+        //when
+        Page<Article> page = articleRepository.findAllByOrderByIdDesc(new PageRequest(0, 10));
+
+        //then
+        List<Article> articles = page.getContent();
+        assertTrue(articles.get(0).getId() > articles.get(articles.size()-1).getId());
     }
 
     private Article givenSaveArticle() {
