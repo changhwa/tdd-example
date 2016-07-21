@@ -49,6 +49,7 @@ export default class Board extends Component {
   showWriteForm() {
     const flag = this.state.showWriteForm;
     this.setState({
+      articleId: null,
       title: '',
       body: ''
     }, () => this.setState({
@@ -59,7 +60,7 @@ export default class Board extends Component {
   @autobind
   saveArticle() {
     request.post('/api/article')
-      .send({title: this.state.title, body: this.state.body})
+      .send({id: this.state.articleId, title: this.state.title, body: this.state.body})
       .set('Accept', 'application/json')
       .end((err, res) => {
         if (!err) {
@@ -69,6 +70,16 @@ export default class Board extends Component {
           this.handlePageChanged(0);
         }
       });
+  }
+
+  @autobind
+  readArticle(rows) {
+    this.setState({
+      articleId: rows.id,
+      title: rows.title,
+      body: rows.body,
+      showWriteForm: true
+    })
   }
 
   @autobind
@@ -90,6 +101,14 @@ export default class Board extends Component {
   }
 
   render() {
+
+    const selectRow = {
+      mode: 'radio',
+      hideSelectColumn: true,
+      clickToSelect: true,
+      onSelect: this.readArticle
+    };
+
     return (
       <div>
         <Grid fluid={true}>
@@ -127,7 +146,7 @@ export default class Board extends Component {
             <Row>
               <Col xs={12}>
                 <div>
-                  <BootstrapTable data={this.state.articles}>
+                  <BootstrapTable data={this.state.articles} selectRow={selectRow}>
                     <TableHeaderColumn dataField="id" isKey={true} hidden>ID</TableHeaderColumn>
                     <TableHeaderColumn dataField="title">제목</TableHeaderColumn>
                     <TableHeaderColumn dataField="updatedAt" dataFormat={this.convertDateFormat}>수정일</TableHeaderColumn>
