@@ -4,3 +4,5 @@
 target
 mvnw
 mvnw.cmd
+webapp/dist
+webapp/node_modules
