@@ -13,7 +13,6 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Article {
 
     @Id
