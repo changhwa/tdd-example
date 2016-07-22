@@ -27,15 +27,6 @@ public class Comment {
     @JoinColumn(name = "article_id")
     private Article article;
 
-    public Comment(String body) {
-        this.body = body;
-    }
-
-    public Comment(Long id, String body) {
-        this.id = id;
-        this.body = body;
-    }
-
     public Comment(Article article, CommentDto commentDto) {
         this.id = commentDto.getId();
         this.body = commentDto.getBody();
