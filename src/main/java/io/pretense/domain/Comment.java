@@ -1,14 +1,18 @@
 package io.pretense.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.pretense.interfaces.api.support.CommentDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class Comment {
 
@@ -23,13 +27,19 @@ public class Comment {
     @JoinColumn(name = "article_id")
     private Article article;
 
-    Comment(String body) {
+    public Comment(String body) {
         this.body = body;
     }
 
-    Comment(Long id, String body) {
+    public Comment(Long id, String body) {
         this.id = id;
         this.body = body;
+    }
+
+    public Comment(Article article, CommentDto commentDto) {
+        this.id = commentDto.getId();
+        this.body = commentDto.getBody();
+        this.article = article;
     }
 
     @PrePersist
@@ -40,6 +50,20 @@ public class Comment {
     @PreUpdate
     public void preUpdateUpdateAt() {
         this.updatedAt = new Date();
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment = (Comment) o;
+        return Objects.equals(id, comment.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }
