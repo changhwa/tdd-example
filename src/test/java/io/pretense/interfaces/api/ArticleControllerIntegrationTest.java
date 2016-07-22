@@ -2,7 +2,7 @@ package io.pretense.interfaces.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.pretense.config.ControllerIntegrationTestHelper;
+import helper.ControllerIntegrationTestHelper;
 import io.pretense.domain.Article;
 import io.pretense.infrastructure.jpa.ArticleRepository;
 import org.junit.Before;

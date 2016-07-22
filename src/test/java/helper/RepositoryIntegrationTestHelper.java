@@ -1,4 +1,4 @@
-package io.pretense.config;
+package helper;
 
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;

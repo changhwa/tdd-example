@@ -1,6 +1,6 @@
 package io.pretense.infrastructure.jpa;
 
-import io.pretense.config.RepositoryIntegrationTestHelper;
+import helper.RepositoryIntegrationTestHelper;
 import io.pretense.domain.Article;
 import io.pretense.domain.Comment;
 import org.junit.Before;

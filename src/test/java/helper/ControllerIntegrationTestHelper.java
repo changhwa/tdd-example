@@ -1,4 +1,4 @@
-package io.pretense.config;
+package helper;
 
 import io.pretense.DemoApplicationTests;
 import org.junit.runner.RunWith;

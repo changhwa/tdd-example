@@ -1,7 +1,6 @@
 package io.pretense.interfaces.api;
 
-import io.pretense.application.exception.ArticleNotFoundException;
-import io.pretense.config.ControllerIntegrationTestHelper;
+import helper.ControllerIntegrationTestHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
