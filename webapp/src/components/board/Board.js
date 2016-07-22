@@ -53,7 +53,8 @@ export default class Board extends Component {
       articleId: null,
       title: '',
       body: '',
-      comments: []
+      comments: [],
+      commentBody: ''
     }, () => this.setState({
       showWriteForm: !flag
     }));
@@ -75,6 +76,24 @@ export default class Board extends Component {
   }
 
   @autobind
+  saveComment() {
+    const url = `/api/article/${this.state.articleId}/comment`;
+    request.post(url)
+      .send({ body: this.state.commentBody })
+      .set('Accept', 'application/json')
+      .end((err, res) => {
+        if (!err) {
+          const comments = this.state.comments;
+          console.log( comments.concat([res.body]));
+          this.setState({
+            comments: comments.concat([res.body])
+          });
+        }
+      });
+
+  }
+
+  @autobind
   readArticle(rows) {
     const url = `/api/article/${rows.id}`;
     request.get(url)
@@ -87,6 +106,7 @@ export default class Board extends Component {
               title: resBody.title,
               body: resBody.body,
               comments: resBody.comments,
+              commentBody: '',
               showWriteForm: true,
               showWriteBtn: '리스트'
             });
@@ -111,7 +131,7 @@ export default class Board extends Component {
   @autobind
   changeComment(event) {
     this.setState({
-      comment: event.target.value
+      commentBody: event.target.value
     });
   }
 
@@ -173,7 +193,7 @@ export default class Board extends Component {
                       this.state.comments ?
                       <FormGroup controlId="formControlsText">
                         <ControlLabel>댓글</ControlLabel>
-                        &nbsp;&nbsp;<Button bsSize="xsmall" onClick={this.saveArticle}>등록</Button>
+                        &nbsp;&nbsp;<Button bsSize="xsmall" onClick={this.saveComment}>등록</Button>
                         <FormControl
                           type="text"
                           ref="comment"
@@ -181,6 +201,7 @@ export default class Board extends Component {
                           value={this.state.comment}
                           onChange={this.changeComment}
                         />
+                        <hr />
                         <Media.List>
                           <Media.ListItem>
                         {
