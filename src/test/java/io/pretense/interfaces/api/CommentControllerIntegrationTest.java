@@ -27,7 +27,7 @@ public class CommentControllerIntegrationTest extends ControllerIntegrationTestH
 
 
     @Test
-    public void 게시글_등록_201_OK() throws Exception {
+    public void 댓글_등록_201_OK() throws Exception {
 
         //given
         String json = "{\"body\":\"댓글본문\"}";
@@ -41,7 +41,7 @@ public class CommentControllerIntegrationTest extends ControllerIntegrationTestH
     }
 
     @Test
-    public void 게시글_등록시_없는_게시글_예외_발생_403_ERROR() throws Exception {
+    public void 댓글_등록시_게시글이_없는_경우_게시글_예외_발생_403_ERROR() throws Exception {
 
         //given
         String json = "{\"body\":\"댓글본문\"}";
