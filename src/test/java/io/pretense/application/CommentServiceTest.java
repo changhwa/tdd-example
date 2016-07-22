@@ -90,6 +90,28 @@ public class CommentServiceTest {
         assertThat(comment.getArticle().getComments().size(), is(1));
     }
 
+    @Test
+    public void 댓글을_수정을_시도하여_성공한다() {
+
+        //given
+        CommentDto givenBeforeUpdateComment = new CommentDto();
+        givenBeforeUpdateComment.setId(1L);
+        givenBeforeUpdateComment.setBody("수정본문");
+        Comment expectUpdateComment = new Comment(givenArticle, givenBeforeUpdateComment);
+
+        when(articleRepository.findOne(1L)).thenReturn(givenArticle);
+        when(commentRepository.save(givenComment)).thenReturn(expectUpdateComment);
+
+        //when
+        Comment comment = commentService.save(1L, givenCommentDto);
+
+        //then
+        assertThat(comment.getId(), is(1L));
+        assertThat(comment.getBody(), is("수정본문"));
+        assertThat(comment.getArticle().getComments().size(), is(1));
+
+    }
+
     private Article createArticleFixture() {
         return new Article(1L, "제목", "본문");
     }

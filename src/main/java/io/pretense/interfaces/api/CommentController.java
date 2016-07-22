@@ -24,6 +24,6 @@ public class CommentController {
         if (bindingResult.hasErrors()) {
             throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
-        return new ResponseEntity<>(commentService.save(articleId, commentDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(commentService.save(articleId, commentDto), HttpStatus.OK);
     }
 }

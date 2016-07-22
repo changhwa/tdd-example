@@ -27,14 +27,14 @@ public class CommentControllerIntegrationTest extends ControllerIntegrationTestH
 
 
     @Test
-    public void 댓글_등록_201_OK() throws Exception {
+    public void 댓글_등록_200_OK() throws Exception {
 
         //given
         String json = "{\"body\":\"댓글본문\"}";
 
         //when
         String body = mvc.perform(post("/api/article/9/comment").contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
         assertThat(body, containsString("\"body\":\"댓글본문\""));
@@ -49,5 +49,21 @@ public class CommentControllerIntegrationTest extends ControllerIntegrationTestH
         //when
         mvc.perform(post("/api/article/99999/comment").contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 댓글_수정시_200_OK() throws Exception {
+
+        //given
+        String json = "{\"id\":1,\"body\":\"수정본문\"}";
+
+        //when
+        String body = mvc.perform(post("/api/article/9/comment").contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        assertThat(body, containsString("{\"id\":1,\"body\":\"수정본문\""));
     }
 }
