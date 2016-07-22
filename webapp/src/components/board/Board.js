@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import autobind from 'autobind-decorator';
 import request from 'superagent';
-import { Grid, Col, Button, Row, FormGroup, ControlLabel, FormControl, Media, ButtonToolbar } from 'react-bootstrap';
+import { Grid, Col, Button, Row, FormGroup, ControlLabel, FormControl, ButtonToolbar } from 'react-bootstrap';
 import Pager from 'react-pager';
 import moment from 'moment';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import CommentList from './CommentList';
+import Noti from '../../util/Noti';
 import 'react-bootstrap-table/css/react-bootstrap-table-all.min.css';
 
 export default class Board extends Component {
@@ -76,21 +78,22 @@ export default class Board extends Component {
   }
 
   @autobind
-  saveComment() {
+  saveComment(comment) {
     const url = `/api/article/${this.state.articleId}/comment`;
     request.post(url)
-      .send({ body: this.state.commentBody })
+      .send({ id: comment.id, body: comment.body })
       .set('Accept', 'application/json')
       .end((err, res) => {
         if (!err) {
-          const comments = this.state.comments;
-          console.log( comments.concat([res.body]));
-          this.setState({
-            comments: comments.concat([res.body])
-          });
+          if (comment.id !== res.body.id) {
+            const comments = this.state.comments;
+            this.setState({
+              comments: new Array(res.body).concat(comments)
+            });
+          }
+          Noti.getSuccessNoti();
         }
       });
-
   }
 
   @autobind
@@ -128,13 +131,6 @@ export default class Board extends Component {
     });
   }
 
-  @autobind
-  changeComment(event) {
-    this.setState({
-      commentBody: event.target.value
-    });
-  }
-
   convertDateFormat(cell) {
     return moment(cell).format('YYYY-MM-DD HH:mm:ss');
   }
@@ -167,7 +163,7 @@ export default class Board extends Component {
               <Col xs={5}>
                 <div>
                   <form>
-                    <FormGroup controlId="formControlsText">
+                    <FormGroup controlId="formTitle">
                       <ControlLabel>제목</ControlLabel>
                       <FormControl
                         type="text"
@@ -178,7 +174,7 @@ export default class Board extends Component {
                       />
                     </FormGroup>
 
-                    <FormGroup controlId="formControlsTextarea">
+                    <FormGroup controlId="formBody">
                       <ControlLabel>본문</ControlLabel>
                       <FormControl
                         componentClass="textarea"
@@ -188,37 +184,11 @@ export default class Board extends Component {
                         onChange={this.changeBody}
                       />
                     </FormGroup>
+                    <CommentList
+                      comments={this.state.comments}
+                      saveComment={this.saveComment}
+                    />
 
-                    {
-                      this.state.comments ?
-                      <FormGroup controlId="formControlsText">
-                        <ControlLabel>댓글</ControlLabel>
-                        &nbsp;&nbsp;<Button bsSize="xsmall" onClick={this.saveComment}>등록</Button>
-                        <FormControl
-                          type="text"
-                          ref="comment"
-                          placeholder="comment"
-                          value={this.state.comment}
-                          onChange={this.changeComment}
-                        />
-                        <hr />
-                        <Media.List>
-                          <Media.ListItem>
-                        {
-                          this.state.comments.map(comment =>
-                            <Media>
-                              <Media.Body>
-                                <Media.Heading>{comment.body}</Media.Heading>
-                                <p><Button bsSize="small">수정</Button> &nbsp;
-                                <Button bsSize="small">삭제</Button></p>
-                              </Media.Body>
-                            </Media>
-                          )
-                        }
-                          </Media.ListItem>
-                        </Media.List>
-                      </FormGroup> : null
-                    }
                   </form>
                 </div>
               </Col>

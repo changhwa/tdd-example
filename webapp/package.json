@@ -61,6 +61,7 @@
     "react-pager": "^1.1.4",
     "react-router": "^2.0.0-rc5",
     "react-router-bootstrap": "^0.23.0",
-    "superagent": "^1.8.3"
+    "superagent": "^1.8.3",
+    "sweetalert": "^1.1.3"
   }
 }
