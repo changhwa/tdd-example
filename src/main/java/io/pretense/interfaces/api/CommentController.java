@@ -22,7 +22,7 @@ public class CommentController {
                                       @RequestBody @Valid CommentDto commentDto,
                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new IllegalArgumentException(bindingResult.getAllErrors().get(0).getDefaultMessage());
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(commentService.save(articleId, commentDto), HttpStatus.OK);
     }

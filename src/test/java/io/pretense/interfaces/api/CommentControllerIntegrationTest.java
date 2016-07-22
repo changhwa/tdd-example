@@ -53,6 +53,17 @@ public class CommentControllerIntegrationTest extends ControllerIntegrationTestH
     }
 
     @Test
+    public void 댓글_등록시_댓글내용이_없는경우_403_ERROR() throws Exception {
+
+        //given
+        String json = "{\"body\":null}";
+
+        //when
+        mvc.perform(post("/api/article/1/comment").contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void 댓글_수정시_200_OK() throws Exception {
 
         //given
