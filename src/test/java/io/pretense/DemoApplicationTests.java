@@ -9,8 +9,6 @@ import org.springframework.test.context.ActiveProfiles;
 @EnableConfigurationProperties
 @ActiveProfiles(profiles = "test")
 public class DemoApplicationTests {
-
-
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
     }

@@ -113,6 +113,7 @@ public class ArticleControllerIntegrationTest extends ControllerIntegrationTestH
         //then
         assertThat(body, containsString("{\"id\":" + article.getId() + ",\"title\":\"조회제목\",\"body\":\"조회본문\",\"updatedAt\":"));
     }
+
     private Article createArticle(String title, String body) {
         return articleRepository.save(new Article(title, body));
     }

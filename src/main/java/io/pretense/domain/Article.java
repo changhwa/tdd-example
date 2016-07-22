@@ -1,11 +1,8 @@
 package io.pretense.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.pretense.interfaces.api.support.ArticleDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -53,8 +50,8 @@ public class Article {
     }
 
     public void addComment(Comment comment) {
-        if( comments == null) comments = new ArrayList<>();
-        if(!comments.contains(comment)) {
+        if (comments == null) comments = new ArrayList<>();
+        if (!comments.contains(comment)) {
             comments.add(comment);
         }
     }

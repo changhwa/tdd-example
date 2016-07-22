@@ -1,18 +1,15 @@
 package io.pretense.interfaces.api.support;
 
-import io.pretense.domain.Article;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
-@Getter @Setter
+@Getter
+@Setter
 public class ArticleDto {
 
     private Long id;
@@ -25,7 +22,8 @@ public class ArticleDto {
 
     private Date updatedAt;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     public static class ListDto {
         private Long size;
         private Long totalPages;

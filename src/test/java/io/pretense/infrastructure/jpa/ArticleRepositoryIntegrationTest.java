@@ -88,7 +88,7 @@ public class ArticleRepositoryIntegrationTest extends RepositoryIntegrationTestH
 
         //then
         List<Article> articles = page.getContent();
-        assertTrue(articles.get(0).getId() > articles.get(articles.size()-1).getId());
+        assertTrue(articles.get(0).getId() > articles.get(articles.size() - 1).getId());
     }
 
     @Test
