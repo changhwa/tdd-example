@@ -11,6 +11,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -65,5 +66,21 @@ public class CommentControllerIntegrationTest extends ControllerIntegrationTestH
                 .getContentAsString();
 
         assertThat(body, containsString("{\"id\":1,\"body\":\"수정본문\""));
+    }
+
+    @Test
+    public void 댓글_존재하지않은_삭제시도시_403_ERROR() throws Exception {
+        //given
+        //when
+        mvc.perform(delete("/api/article/9/comment/9999").contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void 댓글_삭제시_200_OK() throws Exception {
+        //given
+        //when
+        mvc.perform(delete("/api/article/9/comment/2").contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
     }
 }

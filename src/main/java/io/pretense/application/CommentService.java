@@ -27,4 +27,8 @@ public class CommentService {
         article.addComment(comment);
         return comment;
     }
+
+    public void delete(Long id) {
+        commentRepository.delete(id);
+    }
 }

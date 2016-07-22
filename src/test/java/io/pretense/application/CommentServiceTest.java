@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -20,25 +21,22 @@ import java.util.Date;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 @ActiveProfiles(profiles = "test")
 public class CommentServiceTest {
 
-    @InjectMocks
-    private CommentService commentService = new CommentService();
-
-    @Mock
-    private ArticleRepository articleRepository;
-
-    @Mock
-    private CommentRepository commentRepository;
-
     CommentDto givenCommentDto;
     Article givenArticle;
     Comment givenComment;
     Comment expectComment;
+    @InjectMocks
+    private CommentService commentService = new CommentService();
+    @Mock
+    private ArticleRepository articleRepository;
+    @Mock
+    private CommentRepository commentRepository;
 
     @Before
     public void setUp() {
@@ -110,6 +108,33 @@ public class CommentServiceTest {
         assertThat(comment.getBody(), is("수정본문"));
         assertThat(comment.getArticle().getComments().size(), is(1));
 
+    }
+
+    @Test(expected = EmptyResultDataAccessException.class)
+    public void 존재하지_않는_댓글을_삭제_시도하여_실패한다() {
+
+        //given
+        long givenDeleteCommentId = 9999L;
+        doThrow(new EmptyResultDataAccessException(1)).when(commentRepository).delete(givenDeleteCommentId);
+
+        //when
+        commentService.delete(givenDeleteCommentId);
+
+        //then
+        //exception
+    }
+
+    @Test
+    public void 댓글을_삭제_시도하여_성공한다() {
+
+        //given
+        doNothing().when(commentRepository).delete(1L);
+
+        //when
+        commentService.delete(1L);
+
+        //then
+        verify(commentRepository).delete(1L);
     }
 
     private Article createArticleFixture() {

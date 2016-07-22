@@ -26,4 +26,10 @@ public class CommentController {
         }
         return new ResponseEntity<>(commentService.save(articleId, commentDto), HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/article/{articleId}/comment/{commentId}", method = RequestMethod.DELETE)
+    public ResponseEntity delete(@PathVariable Long articleId, @PathVariable Long commentId) {
+        commentService.delete(commentId);
+        return new ResponseEntity<>(articleId, HttpStatus.OK);
+    }
 }
