@@ -118,6 +118,21 @@ export default class Board extends Component {
   }
 
   @autobind
+  deleteComment(comment) {
+    const url = `/api/article/${this.state.articleId}/comment/${comment.id}`;
+    request.delete(url)
+      .set('Accept', 'application/json')
+      .end((err) => {
+        if (!err) {
+          let comments = this.state.comments;
+          comments = comments.filter(item => item.id !== comment.id);
+          this.setState({ comments });
+          Noti.getSuccessNoti();
+        }
+      });
+  }
+
+  @autobind
   changeTitle(event) {
     this.setState({
       title: event.target.value
@@ -187,6 +202,7 @@ export default class Board extends Component {
                     <CommentList
                       comments={this.state.comments}
                       saveComment={this.saveComment}
+                      deleteComment={this.deleteComment}
                     />
 
                   </form>

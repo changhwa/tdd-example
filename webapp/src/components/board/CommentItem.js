@@ -39,6 +39,18 @@ export default class CommentItem extends Component {
     }, () => this.props.saveComment(newComment));
   }
 
+  @autobind
+  handleClickDelete(comment) {
+    const newComment = {
+      id: comment.id,
+      body: comment.body
+    };
+
+    this.setState({
+      comment: newComment
+    }, () => this.props.deleteComment(newComment));
+  }
+
   render() {
     const { comment } = this.props;
     return (
@@ -46,7 +58,7 @@ export default class CommentItem extends Component {
         <Media.Body>
           <p>
             <Button bsSize="xsmall" onClick={() => this.handleClickUpdate(comment)}>수정</Button> &nbsp;
-            <Button bsSize="xsmall">삭제</Button></p>
+            <Button bsSize="xsmall" onClick={() => this.handleClickDelete(comment)}>삭제</Button></p>
           <Media.Heading>
             <FormControl
               refs="body"
@@ -66,5 +78,6 @@ export default class CommentItem extends Component {
 
 CommentItem.propTypes = {
   saveComment: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired,
   comment: PropTypes.object.isRequired
 };

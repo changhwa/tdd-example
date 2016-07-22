@@ -52,6 +52,7 @@ export default class CommentList extends Component {
                         key={`comments_item${idx}`}
                         comment={comment}
                         saveComment={this.props.saveComment}
+                        deleteComment={this.props.deleteComment}
                       />
                     )
                   }
@@ -66,5 +67,6 @@ export default class CommentList extends Component {
 
 CommentList.propTypes = {
   saveComment: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired,
   comments: PropTypes.array
 };
