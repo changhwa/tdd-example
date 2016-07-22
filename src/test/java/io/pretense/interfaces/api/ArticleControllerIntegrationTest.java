@@ -100,7 +100,7 @@ public class ArticleControllerIntegrationTest extends ControllerIntegrationTestH
     }
 
     @Test
-    public void 게시글_한건_조회() throws Exception {
+    public void 게시글_한건_조회시_댓글도_같이_가져온다() throws Exception {
 
         //given
         Article article = createArticle("조회제목", "조회본문");
@@ -112,6 +112,7 @@ public class ArticleControllerIntegrationTest extends ControllerIntegrationTestH
 
         //then
         assertThat(body, containsString("{\"id\":" + article.getId() + ",\"title\":\"조회제목\",\"body\":\"조회본문\",\"updatedAt\":"));
+        assertThat(body, containsString("\"comments\""));
     }
 
     private Article createArticle(String title, String body) {
