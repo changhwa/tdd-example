@@ -23,8 +23,13 @@ public class CommentService {
     public Comment save(Long articleId, CommentDto commentDto) {
         Article article = getArticle(articleId);
         Comment comment = commentRepository.save(new Comment(article, commentDto));
+        addParentComment(commentDto, comment);
         article.addComment(comment);
         return comment;
+    }
+
+    public void delete(Long id) {
+        commentRepository.delete(id);
     }
 
     private Article getArticle(Long articleId) {
@@ -33,7 +38,10 @@ public class CommentService {
         return article;
     }
 
-    public void delete(Long id) {
-        commentRepository.delete(id);
+    private void addParentComment(CommentDto commentDto, Comment comment) {
+        if(commentDto.getParentId() != null) {
+            Comment parentComment = commentRepository.findOne(commentDto.getParentId());
+            parentComment.addChildComment(comment);
+        }
     }
 }

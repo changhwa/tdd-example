@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -27,10 +29,34 @@ public class Comment {
     @JoinColumn(name = "article_id")
     private Article article;
 
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Comment parentComment;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id")
+    private List<Comment> childComments = new ArrayList<>();
+
     public Comment(Article article, CommentDto commentDto) {
         this.id = commentDto.getId();
         this.body = commentDto.getBody();
         this.article = article;
+    }
+
+    public void addChildComment(Comment childComment) {
+        if (isNotExistChildComment(childComment)) {
+            childComments.add(childComment);
+            childComment.setParentComment(this);
+        }
+    }
+
+    private void setParentComment(Comment parentComment) {
+        this.parentComment = parentComment;
+    }
+
+    private boolean isNotExistChildComment(Comment childComment) {
+        return childComment != null && !childComments.contains(childComment);
     }
 
     @PrePersist

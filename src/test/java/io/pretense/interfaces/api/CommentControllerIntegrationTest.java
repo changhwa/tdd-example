@@ -1,6 +1,8 @@
 package io.pretense.interfaces.api;
 
 import helper.ControllerIntegrationTestHelper;
+import io.pretense.domain.Comment;
+import io.pretense.infrastructure.jpa.CommentRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -20,6 +23,9 @@ public class CommentControllerIntegrationTest extends ControllerIntegrationTestH
     @Autowired
     private WebApplicationContext context;
     private MockMvc mvc;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Before
     public void setup() {
@@ -93,5 +99,24 @@ public class CommentControllerIntegrationTest extends ControllerIntegrationTestH
         //when
         mvc.perform(delete("/api/article/9/comment/2").contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void 대댓글_등록시_200_OK() throws Exception {
+
+        //given
+        String json = "{\"body\":\"댓글본문\", \"parentId\": 1}";
+
+        //when
+        mvc.perform(post("/api/article/9/comment").contentType(MediaType.APPLICATION_JSON_UTF8).content(json))
+                .andExpect(status().isOk());
+
+        //then
+        assertThatByRepository();
+    }
+
+    private void assertThatByRepository() {
+        Comment comment = commentRepository.findOne(1L);
+        assertThat(comment.getChildComments().size(), is(1));
     }
 }

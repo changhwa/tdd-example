@@ -15,4 +15,6 @@ public class CommentDto {
     @NotEmpty
     private String body;
     private Date updatedAt;
+
+    private Long parentId;
 }

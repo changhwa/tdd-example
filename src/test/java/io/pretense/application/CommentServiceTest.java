@@ -16,6 +16,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -31,6 +32,11 @@ public class CommentServiceTest {
     Article givenArticle;
     Comment givenComment;
     Comment expectComment;
+
+    CommentDto givenReCommentDto;
+    Comment givenReComment;
+    Comment expectReComment;
+
     @InjectMocks
     private CommentService commentService = new CommentService();
     @Mock
@@ -44,6 +50,15 @@ public class CommentServiceTest {
         givenArticle = createArticleFixture();
         givenComment = new Comment(givenArticle, givenCommentDto);
         expectComment = createCommentFixture();
+
+
+        //TODO : 귀찮아 그냥 만들고 리팩토링할래
+        givenReCommentDto= new CommentDto();
+        givenReCommentDto.setParentId(1L);
+        givenReCommentDto.setBody("대댓글");
+
+        givenReComment = new Comment(givenArticle, givenReCommentDto);
+        expectReComment = new Comment(2L, "대댓글", new Date(), givenArticle, null, new ArrayList());
     }
 
     @Test(expected = InvalidDataAccessApiUsageException.class)
@@ -137,6 +152,23 @@ public class CommentServiceTest {
         verify(commentRepository).delete(1L);
     }
 
+    @Test
+    public void 대댓글을_작성_시도하여_성공한다() {
+
+        //given
+        when(articleRepository.findOne(1L)).thenReturn(givenArticle);
+        when(commentRepository.save(givenReComment)).thenReturn(expectReComment);
+        when(commentRepository.findOne(1L)).thenReturn(expectComment);
+
+        //when
+        Comment comment = commentService.save(1L, givenReCommentDto);
+
+        //then
+        assertThat(comment.getId(), is(2L));
+        assertThat(comment.getParentComment().getId(), is(1L));
+        assertThat(comment.getParentComment().getChildComments().size(), is(1));
+    }
+
     private Article createArticleFixture() {
         return new Article(1L, "제목", "본문");
     }
@@ -148,7 +180,7 @@ public class CommentServiceTest {
     }
 
     public Comment createCommentFixture() {
-        return new Comment(1L, "댓글본문", new Date(), givenArticle);
+        return new Comment(1L, "댓글본문", new Date(), givenArticle, null, new ArrayList());
     }
 
 }
