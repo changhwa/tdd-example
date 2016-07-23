@@ -21,11 +21,16 @@ public class CommentService {
 
     @Transactional
     public Comment save(Long articleId, CommentDto commentDto) {
-        Article article = articleRepository.findOne(articleId);
-        if (article == null) throw new ArticleNotFoundException();
+        Article article = getArticle(articleId);
         Comment comment = commentRepository.save(new Comment(article, commentDto));
         article.addComment(comment);
         return comment;
+    }
+
+    private Article getArticle(Long articleId) {
+        Article article = articleRepository.findOne(articleId);
+        if (article == null) throw new ArticleNotFoundException();
+        return article;
     }
 
     public void delete(Long id) {
