@@ -29,6 +29,29 @@ export default class CommentList extends Component {
   }
 
   render() {
+    const makeComment = data => {
+      return data.map((comment, idx) => {
+        if (comment.childComments) {
+          return (
+            <CommentItem
+              key={`comments_item${idx}`}
+              comment={comment}
+              saveComment={this.props.saveComment}
+              deleteComment={this.props.deleteComment}
+            > {makeComment(comment.childComments)} </CommentItem>
+          );
+        }
+        return (
+          <CommentItem
+            key={`comments_item${idx}`}
+            comment={comment}
+            saveComment={this.props.saveComment}
+            deleteComment={this.props.deleteComment}
+          />
+        );
+      });
+    };
+
     return (
       <div>
         <FormGroup>
@@ -47,14 +70,7 @@ export default class CommentList extends Component {
               <Media.List>
                 <Media.ListItem>
                   {
-                    this.props.comments.map((comment, idx) =>
-                      <CommentItem
-                        key={`comments_item${idx}`}
-                        comment={comment}
-                        saveComment={this.props.saveComment}
-                        deleteComment={this.props.deleteComment}
-                      />
-                    )
+                    makeComment(this.props.comments)
                   }
                 </Media.ListItem>
               </Media.List> : null

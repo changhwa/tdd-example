@@ -12,3 +12,5 @@ insert into article (id, title, body, updated_at) VALUES (9, '테스트-제목9'
 insert into comment (id, body, article_id, updated_at) VALUES (1, '테스트9-댓글1', 9, now());
 insert into comment (id, body, article_id, updated_at) VALUES (2, '테스트9-댓글2', 9, now());
 insert into comment (id, body, article_id, updated_at) VALUES (3, '테스트8-댓글1', 8, now());
+insert into comment (id, body, article_id, updated_at, parent_id) VALUES (4, '테스트9-댓글1-대댓글1', 9, now(), 1);
+insert into comment (id, body, article_id, updated_at, parent_id) VALUES (5, '테스트9-댓글1-대댓글2', 9, now(), 1);

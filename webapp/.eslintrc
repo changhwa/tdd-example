@@ -10,6 +10,8 @@
     "react/jsx-boolean-value": 0,
     "max-len": [2, 120, 2],
     "react/sort-comp": 0,
-    "spaced-comment": 0
+    "spaced-comment": 0,
+    "arrow-body-style": 0
+
   }
 }
